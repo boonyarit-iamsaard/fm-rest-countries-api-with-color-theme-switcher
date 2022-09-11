@@ -1,7 +1,16 @@
 {
   "name": "fm-rest-countries-api-with-color-theme-switcher",
+  "author": "Boonyarit Iamsa-ard",
+  "description": "This is a solution to the REST Countries API with color theme switcher challenge on Frontend Mentor.",
+  "homepage": "https://github.com/boonyarit-iamsaard/fm-rest-countries-api-with-color-theme-switcher",
+  "license": "MIT",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14.0.0",
+    "yarn": ">=1.22.0",
+    "npm": "please-use-yarn"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
