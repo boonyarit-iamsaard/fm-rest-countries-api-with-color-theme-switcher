@@ -5,8 +5,13 @@ import {
   CountryExtended,
 } from '@/lib/types';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var countriesRepository: CountriesRepositoryInterface | undefined;
+}
+
 // TODO: implement error handling
-export class CountriesRepository implements CountriesRepositoryInterface {
+class CountriesRepository implements CountriesRepositoryInterface {
   private readonly baseApiUrl = BASE_API_URL;
   private readonly baseFields = BASE_FIELDS;
   private readonly extendedFields = EXTENDED_FIELDS;
@@ -19,13 +24,33 @@ export class CountriesRepository implements CountriesRepositoryInterface {
     return countries;
   }
 
-  async findByCommonName(commonName: string): Promise<CountryExtended | null> {
-    const response = await fetch(
-      `${this.baseApiUrl}/name/${commonName}?fields=${this.extendedFields.join(
-        ','
-      )}`
-    );
-    const countries = (await response.json()) as CountryExtended[];
-    return countries.length > 0 ? countries[0] : null;
+  async findByCountryCode(code: string): Promise<CountryExtended | null> {
+    try {
+      const response = await fetch(
+        `${
+          this.baseApiUrl
+        }/alpha?codes=${code}&fields=${this.extendedFields.join(',')}`
+      );
+
+      if (!response.ok) {
+        console.error(
+          `response not ok error => ${response.status}: ${response.statusText}`
+        );
+        return null;
+      }
+
+      const countries = (await response.json()) as CountryExtended[];
+      return countries.length > 0 ? countries[0] : null;
+    } catch (error) {
+      console.error('catch error => ', error);
+      return null;
+    }
   }
+}
+
+export const countriesRepository =
+  global.countriesRepository || new CountriesRepository();
+
+if (process.env.NODE_ENV !== 'production') {
+  global.countriesRepository = countriesRepository;
 }

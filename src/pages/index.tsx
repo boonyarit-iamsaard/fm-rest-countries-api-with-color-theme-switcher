@@ -3,9 +3,10 @@ import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import Head from 'next/head';
 
-import { CountriesRepository } from '@/lib/api/countries';
+import { CountryList } from '@/components/country';
+import { useCountryCode } from '@/context';
+import { countriesRepository } from '@/lib/api/countries';
 import type { Country } from '@/lib/types';
-import { CountryList } from '../components/country';
 
 interface HomeProps {
   countries: Country[];
@@ -18,6 +19,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedRegion, setSelectedRegion] = useState<string>('All');
+  const { codes, populateCodes } = useCountryCode();
 
   const handleSearchTermChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -30,6 +32,11 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
   useEffect(() => {
     if (countries) {
+      // set country code context
+      if (!codes.length) {
+        populateCodes(countries);
+      }
+
       const regionOptions = [
         'All',
         ...countries
@@ -58,20 +65,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           })
       );
     }
-  }, [countries, searchTerm, selectedRegion]);
-
-  // TODO: remove this function before deploying
-  countries.forEach(country => {
-    if (Object.keys(country.name.nativeName).length === 0) {
-      console.log('native name not found => ', country.name.common);
-    }
-    if (!country.capital.length) {
-      console.log('capital not found => ', country.name.common);
-    }
-    if (country.population === 0) {
-      console.log('population not found => ', country.name.common);
-    }
-  });
+  }, [countries, searchTerm, selectedRegion, codes, populateCodes]);
 
   return (
     <Fragment>
@@ -123,7 +117,6 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 export default Home;
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const countriesRepository = new CountriesRepository();
   const countries = await countriesRepository.findAll();
 
   // TODO: improve error handling

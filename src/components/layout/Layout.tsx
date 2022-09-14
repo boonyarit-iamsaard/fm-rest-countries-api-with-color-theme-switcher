@@ -12,7 +12,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <Fragment>
       <LayoutHeader />
 
-      <main className="container mx-auto p-4">{children}</main>
+      <main className="container mx-auto space-y-4 p-4">{children}</main>
 
       <LayoutFooter />
     </Fragment>

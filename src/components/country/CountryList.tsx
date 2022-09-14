@@ -26,9 +26,13 @@ const CountryList: FC<CountryListProps> = ({ countryList }) => {
   }, [countryList]);
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {countryList.slice(pageStart, pageEnd).map((country, index) => (
-        <CountryListItem key={country.cca3} country={country} index={index} />
+        <CountryListItem
+          key={country.cca3}
+          country={country}
+          priority={index < 4}
+        />
       ))}
       {hasNextPage && (
         <button

@@ -6,6 +6,7 @@ import '@/styles/globals.css';
 import Head from 'next/head';
 
 import { Layout } from '@/components/layout';
+import { CountryCodeProvider } from '@/context';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -14,7 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <Layout>
-        <Component {...pageProps} />
+        <CountryCodeProvider>
+          <Component {...pageProps} />
+        </CountryCodeProvider>
       </Layout>
     </Fragment>
   );

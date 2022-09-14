@@ -34,7 +34,17 @@ export type CountryExtended = Country & {
   borders: string[];
 };
 
+export type CountryCode = {
+  code: string;
+  name: string;
+};
+
+export type CountryCodeContextType = {
+  codes: CountryCode[];
+  populateCodes: (countries: Country[]) => void;
+};
+
 export interface CountriesRepositoryInterface {
   findAll(): Promise<Country[]>;
-  findByCommonName(commonName: string): Promise<CountryExtended | null>;
+  findByCountryCode(code: string): Promise<CountryExtended | null>;
 }
