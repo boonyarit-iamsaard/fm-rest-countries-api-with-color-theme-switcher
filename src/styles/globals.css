@@ -2,12 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
-#__next {
-  min-height: 100vh;
-}
+@layer base {
+  :root {
+    /* dark mode elements */
+    --color-theme-blue-700: 209deg 23% 22%;
+    /* dark mode background */
+    --color-theme-blue-800: 207deg 26% 17%;
+    /* light mode text */
+    --color-theme-blue-900: 200deg 15% 8%;
+    /* light mode input */
+    --color-theme-gray-500: 0deg 0% 52%;
+    /* light mode background */
+    --color-theme-gray-50: 0deg 0% 98%;
+    /* dark mode text & light mode elements */
+    /* white */
+  }
 
-#__next {
-  display: grid;
-  grid-template-rows: 3rem auto 3rem;
+  body,
+  #__next {
+    @apply min-h-screen;
+  }
+
+  #__next {
+    @apply grid grid-rows-[5rem_auto_3rem];
+    @apply bg-theme-gray-50 dark:bg-theme-blue-800;
+  }
 }
